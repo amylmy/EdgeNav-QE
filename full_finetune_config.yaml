@@ -1,0 +1,16 @@
+training_config:
+  model_name_or_path: "../models/openvla-7b"
+  train_data_path: "./data/demo_push_dataset/train.jsonl"
+  val_data_path: "./data/demo_push_dataset/val.jsonl"
+  output_dir: "./finetuned_openvla_full"
+  per_device_train_batch_size: 8
+  gradient_accumulation_steps: 2
+  learning_rate: 1e-5
+  num_train_epochs: 5
+  logging_steps: 10
+  save_steps: 50
+  fp16: true
+  attn_implementation: "flash_attention_2"  # Enable FlashAttention2 for GPUs
+  device: "cuda"
+  weight_decay: 0.01
+  warmup_ratio: 0.05

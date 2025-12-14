@@ -1,0 +1,25 @@
+# LoRA core configuration
+peft_config:
+  peft_type: LORA
+  r: 8  # LoRA rank (smaller = lower VRAM usage)
+  lora_alpha: 16
+  lora_dropout: 0.05
+  bias: "none"
+  task_type: "VISION_AND_LANGUAGE_GENERATION"
+  target_modules: ["q_proj", "v_proj"]  # Target attention modules for OpenVLA
+
+# Training configuration
+training_config:
+  model_name_or_path: "../models/openvla-7b"  # Path to base model
+  train_data_path: "./data/demo_push_dataset/train.jsonl"
+  val_data_path: "./data/demo_push_dataset/val.jsonl"
+  output_dir: "./finetuned_openvla_lora"  # Path to save fine-tuned LoRA weights
+  per_device_train_batch_size: 2  # Set to 1/2 for macOS
+  gradient_accumulation_steps: 4  # Compensate for small batch size
+  learning_rate: 5e-5
+  num_train_epochs: 10
+  logging_steps: 10
+  save_steps: 50
+  fp16: true  # Enable float16 for macOS MPS (requires PyTorch ≥2.2.0)
+  attn_implementation: "eager"  # Disable FlashAttention2 (mandatory for macOS)
+  device: "mps"  # Use "cuda" for Linux GPUs, "cpu" for CPU-only training
